@@ -7,6 +7,12 @@ public class Student {
 	private String password;
 	private double CGPA;
 	
+	public Student() {
+		this.name = "";
+		this.nsuID = "";
+		this.password = "";
+		this.CGPA = 0.0;
+	}
 	public String getNsuID() {
 		return nsuID;
 	}

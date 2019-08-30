@@ -1,0 +1,4 @@
+CSE545,VLSI,3
+CSE311,Database,3
+CSE332,Architecture,3
+CSE544,Intellectual Property,3

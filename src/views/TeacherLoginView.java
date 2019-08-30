@@ -2,10 +2,14 @@ package views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -63,18 +67,55 @@ public class TeacherLoginView extends JFrame{
 		loginBtn.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				TeacherAddCourseView teacher = new TeacherAddCourseView();
-				teacher.setVisible(true);
+			public void actionPerformed(ActionEvent e) {		
 				
-				TeacherLoginView.this.setVisible(false);
-				
+				if (login() == true) {
+					TeacherAddCourseView teacher = new TeacherAddCourseView();
+					teacher.setVisible(true);
+					
+					TeacherLoginView.this.setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(TeacherLoginView.this,"Sorry, username or password error!");
+				}
 			}
 		});
 		panel.add(loginBtn);
 		
 		
 		this.add(panel);
+	}
+	
+	public boolean login() {
+		//Taking info from files start here//
+				String id = userTF.getText().toString();
+				String password = passPF.getText();
+				
+				boolean found = false; // added this variable
+				
+				Scanner fileScan = null;
+				
+				try {
+					fileScan = new Scanner (new File("teacherInput.txt"));
+					
+					while (fileScan.hasNextLine()) {
+					    String input = fileScan.nextLine();
+					    String Username = input.substring(0, input.indexOf(','));
+					    String Password = input.substring(input.indexOf(',')+1,input.length());
+					    
+					    if ((Username.equals(id)) && (Password.equals(password))) {
+					      found = true; 
+					    } 
+					  }
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				  if(!found) { 
+				    System.out.println("User and Password not found");
+				  }
+				
+				return found;
 	}
 
 

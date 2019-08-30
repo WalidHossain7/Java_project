@@ -7,6 +7,12 @@ public class Teacher {
 	private String password;
 	private double salary;
 	
+	public Teacher() {
+		this.name = "";
+		this.nsuID = "";
+		this.password = "";
+		this.salary = 0.0;
+	}
 	public String getNsuID() {
 		return nsuID;
 	}

@@ -5,6 +5,11 @@ public class Course {
 	private String courseName;
 	private int courseCredit;
 	
+	public Course() {
+		this.courseCode = "";
+		this.courseName = "";
+		this.courseCredit = 0;
+	}
 	public String getCourseCode() {
 		return courseCode;
 	}
@@ -20,7 +25,7 @@ public class Course {
 	public int getCourseCredit() {
 		return courseCredit;
 	}
-	public void setCourseCreadit(int courseCredit) {
+	public void setCourseCredit(int courseCredit) {
 		this.courseCredit = courseCredit;
 	}
 

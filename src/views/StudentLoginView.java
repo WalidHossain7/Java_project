@@ -55,6 +55,49 @@ public class StudentLoginView extends JFrame{
 		passPF.setEchoChar('*');
 		panel.add(passPF);
 				
+		// Adding values to database starts here //
+		String id = userTF.getText().toString();
+		String password = passPF.getText();
+		Student [] students = new Student[5];
+		for ( int i=0; i<students.length; i++) {
+			students[i]=new Student();
+		}
+		System.out.println(students[0].getName());
+		int i = 0;
+		boolean found = false; // added this variable
+		Scanner fileScan = null;
+		try {
+			String stx = "studentInput";
+			fileScan = new Scanner (new File(stx + ".txt"));
+			while (fileScan.hasNextLine()) {
+			    String input = fileScan.nextLine();
+			    System.out.println(input);
+			    
+			    String[] parts = input.split(",");
+			    students[i].setName(parts[0]);
+			    students[i].setNsuID(parts[1]);
+			    students[i].setPassword(parts[2]);
+			    String arb_CGPA = parts[3];
+			    students[i].setCGPA(Double.parseDouble(arb_CGPA));
+			    i++;
+			    if ((students[i].getName().equals(id)) && (students[i].getPassword().equals(password))) {
+			      found = true; // added this to set found
+			    } // removed the else statement
+			  }
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if(!found) { // added the contents of the previously existing else statement here, outside the while
+		    System.out.println("User and Password not found");
+		}
+		//Taking info from files end here//
+		
+		// Adding values to database ends here //
+		
+		
+		
 		exitBtn = new JButton("Exit");
 		exitBtn.setBounds(390, 200, 80, 30);
 		exitBtn.addActionListener(new ActionListener() {
@@ -74,8 +117,10 @@ public class StudentLoginView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String id = userTF.getText().toString();
-				if (login() == true) {
-					StudentAddCourseView teacher = new StudentAddCourseView(id);
+				if (login(students) != null) {
+					Student selected = new Student();
+					selected = login(students);
+					StudentAddCourseView teacher = new StudentAddCourseView(selected);
 					teacher.setVisible(true);
 					StudentLoginView.this.setVisible(false);
 				}
@@ -85,36 +130,29 @@ public class StudentLoginView extends JFrame{
 		
 		this.add(panel);	
 	}
-	public boolean login() {
+	public Student login(Student[] student) {
 		//Taking info from files start here//
+				Student chosen = null;
 				String id = userTF.getText().toString();
 				String password = passPF.getText();
-				//Student [] test = new Student[1];
 				boolean found = false; // added this variable
-				//int i = 0;
-				Scanner fileScan = null;
-				try {
-					fileScan = new Scanner (new File("studentInput.txt"));
-					while (fileScan.hasNextLine()) {
-					    String input = fileScan.nextLine();
-					    String Username = input.substring(0,input.indexOf(','));
-					    String Password = input.substring(input.indexOf(',')+1,input.length());
-					    System.out.println(Username + " " + Password);
-					    System.out.println(id + " " + password);
-					    if ((Username.equals(id)) && (Password.equals(password))) {
-					      found = true; // added this to set found
-					    } // removed the else statement
-					  }
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				int i = 0;
+				for (i=0;i<student.length;i++) {
+					if (id.equals(student[i].getName()) && password.equals(student[i].getPassword())) {
+						chosen = new Student();
+						chosen.setName(student[i].getName());
+						chosen.setNsuID(student[i].getNsuID());
+						chosen.setPassword(student[i].getPassword());
+						chosen.setCGPA(student[i].getCGPA());
+						found = true;
+					}
 				}
 
-				  if(!found) { // added the contents of the previously existing else statement here, outside the while
+				if(!found) { // added the contents of the previously existing else statement here, outside the while
 				    System.out.println("User and Password not found");
-				  }
+				}
 				//Taking info from files end here//
-				return found;
+				return chosen;
 	}
 }
 
