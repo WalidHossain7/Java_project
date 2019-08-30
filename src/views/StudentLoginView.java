@@ -2,6 +2,12 @@ package views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import models.Student;
 
 public class StudentLoginView extends JFrame{
 	
@@ -65,16 +73,48 @@ public class StudentLoginView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StudentAddCourseView teacher = new StudentAddCourseView();
-				teacher.setVisible(true);
-				
-				StudentLoginView.this.setVisible(false);
-				
+				String id = userTF.getText().toString();
+				if (login() == true) {
+					StudentAddCourseView teacher = new StudentAddCourseView(id);
+					teacher.setVisible(true);
+					StudentLoginView.this.setVisible(false);
+				}
 			}
 		});
 		panel.add(loginBtn);
 		
 		this.add(panel);	
 	}
+	public boolean login() {
+		//Taking info from files start here//
+				String id = userTF.getText().toString();
+				String password = passPF.getText();
+				//Student [] test = new Student[1];
+				boolean found = false; // added this variable
+				//int i = 0;
+				Scanner fileScan = null;
+				try {
+					fileScan = new Scanner (new File("studentInput.txt"));
+					while (fileScan.hasNextLine()) {
+					    String input = fileScan.nextLine();
+					    String Username = input.substring(0,input.indexOf(','));
+					    String Password = input.substring(input.indexOf(',')+1,input.length());
+					    System.out.println(Username + " " + Password);
+					    System.out.println(id + " " + password);
+					    if ((Username.equals(id)) && (Password.equals(password))) {
+					      found = true; // added this to set found
+					    } // removed the else statement
+					  }
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
+				  if(!found) { // added the contents of the previously existing else statement here, outside the while
+				    System.out.println("User and Password not found");
+				  }
+				//Taking info from files end here//
+				return found;
+	}
 }
+

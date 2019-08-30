@@ -20,7 +20,7 @@ public class StudentAddCourseView extends JFrame{
 	private JButton addBtn, updateBtn, deleteBtn, backBtn, getAllBtn;
 	private static final long serialVersionUID = 1L;
 
-	public StudentAddCourseView() {
+	public StudentAddCourseView(String id) {
 		super("Student Add Course");
 		
 		this.setSize(800, 450);
